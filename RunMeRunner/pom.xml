@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.htw.ai.kbe</groupId>
-	<artifactId>RunMeRunner</artifactId>
+	<artifactId>runmerunner</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -44,7 +44,7 @@
 					<!-- MainClass in mainfest make a executable jar -->
 					<archive>
 						<manifest>
-							<mainClass>de.htw.ai.kbe.RunMeRunner.App</mainClass>
+							<mainClass>de.htw.ai.kbe.runmerunner.App</mainClass>
 						</manifest>
 					</archive>
 

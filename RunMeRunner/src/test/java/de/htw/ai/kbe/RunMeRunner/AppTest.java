@@ -35,4 +35,20 @@ public class AppTest
     {
         assertTrue( true );
     }
+    
+    public void testOptionsValid() {
+    	/**
+    	 * -c -o 			--> okay 
+    	 * -c 	 			--> okay
+    	 * 	  -o 			--> nicht okay
+    	 *       			--> nicht okay
+    	 * -c -o ohne arg 	--> okay
+    	 * -c arg 			--> file not found exception
+    	 * 	  -o bad file	--> ignore
+    	 * alle ohne RunMe
+    	 * alle mit RunMe
+    	 * alle mit RunMe nicht invokierbar
+    	 * 
+    	 */
+    }
 }
