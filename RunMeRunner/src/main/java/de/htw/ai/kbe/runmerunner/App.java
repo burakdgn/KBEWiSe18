@@ -1,5 +1,6 @@
 package de.htw.ai.kbe.runmerunner;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -27,10 +28,12 @@ public class App {
 
 		HelpFormatter formatter = new HelpFormatter();
 		String name = "RunMeRunner\njava -jar RunMeRunner-1.0-jar-with-dependencies.jar";
-
+		Writer w;
+		
 		try {
 			cmd = parser.parse(options, args);
-
+			
+			
 			if (cmd.hasOption("c")) {
 
 				String cValue = cmd.getOptionValue("c");
@@ -38,11 +41,13 @@ public class App {
 				if (cmd.hasOption("o")) {
 					String oValue = cmd.getOptionValue("o");
 					System.out.println("Input class: " + cValue + "\nReport: " + oValue);
-					findMethods(cValue);
-
+					 w = new Writer(oValue);
+					findMethods(cValue , w);
+					
 				} else {
 					System.out.println("Input class: " + cValue);
-					findMethods(cValue);
+					 w = new Writer("report.txt");
+					findMethods(cValue , w);
 				}
 			} else {
 				formatter.printHelp(name, options, true);
@@ -52,7 +57,7 @@ public class App {
 		}
 	}
 
-	public static void findMethods(String className) {
+	public static void findMethods(String className , Writer w) {
 		Class<?> c;
 		try {
 			c = Class.forName(className);
@@ -69,10 +74,16 @@ public class App {
 					noRunMeMethods.remove(m);
 				}
 			}
-
-			printWithoutRunMe(noRunMeMethods);
-			printWithRunMe(runMeMethods);
-			invokeRunMeMethods(runMeMethods, t);
+			
+			
+			String errors = invokeRunMeMethods(runMeMethods, t);
+			try {
+				w.writeToFile(runMeMethods,noRunMeMethods,errors);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -85,21 +96,9 @@ public class App {
 		}
 	}
 
-	public static void printWithoutRunMe(ArrayList<Method> noRunMeMethods) {
-		System.out.println("Methodennamen ohne @RunMe");
-		for (Method m : noRunMeMethods) {
-			System.out.println("\t" + m.getName());
-		}
-	}
 
-	public static void printWithRunMe(ArrayList<Method> runMeMethods) {
-		System.out.println("Methodennamen mit @RunMe");
-		for (Method m : runMeMethods) {
-			System.out.println("\t" + m.getName());
-		}
-	}
 
-	public static void invokeRunMeMethods(ArrayList<Method> runMeMethods, Object instance) {
+	public static String invokeRunMeMethods(ArrayList<Method> runMeMethods, Object instance) {
 		String errors = "";
 		for (Method m : runMeMethods) {
 			try {
@@ -114,8 +113,16 @@ public class App {
 		}
 		
 		if (!errors.equalsIgnoreCase("")) {
-			System.out.println("'Nicht invokierbare' Methode mit @RunMe" + errors);
+			return "'Nicht invokierbare' Methode mit @RunMe" + errors;
 			
 		}
+		return errors;
 	}
+	
+	
+	
+	
+	
+	
+	
 }
