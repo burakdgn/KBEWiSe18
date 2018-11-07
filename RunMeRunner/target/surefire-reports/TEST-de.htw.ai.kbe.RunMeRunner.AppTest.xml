@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="2" failures="0" name="de.htw.ai.kbe.RunMeRunner.AppTest" time="0.002" errors="0" skipped="0">
+<testsuite tests="9" failures="0" name="de.htw.ai.kbe.RunMeRunner.AppTest" time="0.016" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-8-oracle/jre/lib/amd64"/>
     <property name="java.vm.version" value="25.181-b13"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
-    <property name="maven.multiModuleProjectDirectory" value="/media/s0559658/UGUR/AIHTW/WS18_19/KBE/workspace/RunMeRunner"/>
+    <property name="maven.multiModuleProjectDirectory" value="/home/rechner/Schreibtisch/Komponentenbasierte_Entwicklung/KBEWiSe18/RunMeRunner"/>
     <property name="java.vendor.url" value="http://java.oracle.com/"/>
     <property name="path.separator" value=":"/>
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value="unknown"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="/media/s0559658/UGUR/AIHTW/WS18_19/KBE/workspace/RunMeRunner"/>
+    <property name="user.dir" value="/home/rechner/Schreibtisch/Komponentenbasierte_Entwicklung/KBEWiSe18/RunMeRunner"/>
     <property name="java.runtime.version" value="1.8.0_181-b13"/>
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
     <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-8-oracle/jre/lib/endorsed"/>
@@ -34,12 +34,12 @@
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="os.version" value="4.15.0-36-generic"/>
     <property name="library.jansi.path" value="/usr/share/maven/lib/jansi-native"/>
-    <property name="user.home" value="/home/s0559658"/>
+    <property name="user.home" value="/home/rechner"/>
     <property name="user.timezone" value="Europe/Berlin"/>
     <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
     <property name="java.specification.version" value="1.8"/>
     <property name="file.encoding" value="UTF-8"/>
-    <property name="user.name" value="s0559658"/>
+    <property name="user.name" value="rechner"/>
     <property name="java.class.path" value="/usr/share/maven/boot/plexus-classworlds-2.x.jar"/>
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
@@ -62,6 +62,13 @@
     <property name="sun.desktop" value="gnome"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="de.htw.ai.kbe.RunMeRunner.AppTest" name="testApp" time="0.002"/>
-  <testcase classname="de.htw.ai.kbe.RunMeRunner.AppTest" name="testOptionsValid" time="0"/>
+  <testcase classname="de.htw.ai.kbe.RunMeRunner.AppTest" name="testCOptionWithArgumentAndOOptionWithoutArgumentFail" time="0.009"/>
+  <testcase classname="de.htw.ai.kbe.RunMeRunner.AppTest" name="testOnlyOOptionWithArgumentFail" time="0.001"/>
+  <testcase classname="de.htw.ai.kbe.RunMeRunner.AppTest" name="testWithoutOptionsAndArguments" time="0.001"/>
+  <testcase classname="de.htw.ai.kbe.RunMeRunner.AppTest" name="nonExistentClassNameGiven" time="0.001"/>
+  <testcase classname="de.htw.ai.kbe.RunMeRunner.AppTest" name="testWithAllArgumentsGiven" time="0.003"/>
+  <testcase classname="de.htw.ai.kbe.RunMeRunner.AppTest" name="testCOptionWithArgumentValid" time="0.001"/>
+  <testcase classname="de.htw.ai.kbe.RunMeRunner.AppTest" name="testWithWrongOptions" time="0"/>
+  <testcase classname="de.htw.ai.kbe.RunMeRunner.AppTest" name="testOnlyOOptionWithoutArgumentFail" time="0"/>
+  <testcase classname="de.htw.ai.kbe.RunMeRunner.AppTest" name="testCWithoutArgumentFail" time="0"/>
 </testsuite>

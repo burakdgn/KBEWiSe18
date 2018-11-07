@@ -40,8 +40,23 @@ public class Writer {
 			
 			out.write(errors);
 			
-			System.out.print("Logfile wurde erstellt");
+			System.out.println("Logfile wurde erstellt");
 			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
+	
+	public void writeErrorFile(String errorMessage) throws FileNotFoundException {
+		
+		File file = new File(fileName);
+		FileOutputStream fileOut = new FileOutputStream(fileName);
+		
+		try(OutputStreamWriter out = new OutputStreamWriter(fileOut)){
+			out.write("Bei dieser Datei handelt es sich um einen Fehler-Report\n "
+					+ "Folgender Fehler ist aufgetreten:\n");
+			out.write(errorMessage);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,22 +89,7 @@ public class Writer {
 		}
 	}
 	
-	/*
-	public static void printWithoutRunMe(ArrayList<Method> noRunMeMethods) {
-		System.out.println("Methodennamen ohne @RunMe");
-		for (Method m : noRunMeMethods) {
-			System.out.println("\t" + m.getName());
-		}
-	}
 
-	public static void printWithRunMe(ArrayList<Method> runMeMethods) {
-		System.out.println("Methodennamen mit @RunMe");
-		for (Method m : runMeMethods) {
-			System.out.println("\t" + m.getName());
-		}
-	}
-	
-	*/
 	
 
 }

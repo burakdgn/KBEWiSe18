@@ -23,41 +23,53 @@ public class App {
 		options.addOption(className);
 		options.addOption(outputFile);
 
+		CommandLine cmd = null;
+		commandLineMethod(cmd, options, args);
+
+	}
+
+	public static void commandLineMethod(CommandLine cmd, Options options, String[] args) {
+
 		CommandLineParser parser = new DefaultParser();
-		CommandLine cmd;
 
 		HelpFormatter formatter = new HelpFormatter();
 		String name = "RunMeRunner\njava -jar RunMeRunner-1.0-jar-with-dependencies.jar";
 		Writer w;
-		
+
 		try {
 			cmd = parser.parse(options, args);
-			
-			
-			if (cmd.hasOption("c")) {
 
-				String cValue = cmd.getOptionValue("c");
+			String cValue = cmd.getOptionValue("c");
 
-				if (cmd.hasOption("o")) {
-					String oValue = cmd.getOptionValue("o");
-					System.out.println("Input class: " + cValue + "\nReport: " + oValue);
-					 w = new Writer(oValue);
-					findMethods(cValue , w);
-					
-				} else {
-					System.out.println("Input class: " + cValue);
-					 w = new Writer("report.txt");
-					findMethods(cValue , w);
-				}
+			if (cmd.getOptionValue("o") != null) {
+				String oValue = cmd.getOptionValue("o");
+				System.out.println("Input class: " + cValue + "\nReport: " + oValue);
+				w = new Writer(oValue);
+				findMethods(cValue, w);
+
 			} else {
-				formatter.printHelp(name, options, true);
+				System.out.println("Input class: " + cValue + "\nReport (Default): report.txt");
+				w = new Writer("report.txt");
+				findMethods(cValue, w);
 			}
+
 		} catch (ParseException e) {
 			formatter.printHelp(name, options, true);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Die obere Report-Datei wurde nicht erstellt.\n"
+					+ "Für weitere Informationen öffnen sie die Datei 'error.txt'.");
+			w = new Writer("error.txt");
+			try {
+				w.writeErrorFile(e.toString());
+			} catch (FileNotFoundException e1) {
+				
+				e1.printStackTrace();
+			}
 		}
 	}
 
-	public static void findMethods(String className , Writer w) {
+	public static void findMethods(String className, Writer w) throws ClassNotFoundException {
 		Class<?> c;
 		try {
 			c = Class.forName(className);
@@ -74,31 +86,26 @@ public class App {
 					noRunMeMethods.remove(m);
 				}
 			}
-			
-			
+
 			String errors = invokeRunMeMethods(runMeMethods, t);
 			try {
-				w.writeToFile(runMeMethods,noRunMeMethods,errors);
+				w.writeToFile(runMeMethods, noRunMeMethods, errors);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
-			
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
 
-
-
-	public static String invokeRunMeMethods(ArrayList<Method> runMeMethods, Object instance) {
+	private static String invokeRunMeMethods(ArrayList<Method> runMeMethods, Object instance) {
 		String errors = "";
 		for (Method m : runMeMethods) {
 			try {
@@ -111,18 +118,12 @@ public class App {
 				errors += "\n\t" + m.getName() + ": " + e.getClass().getSimpleName();
 			}
 		}
-		
+
 		if (!errors.equalsIgnoreCase("")) {
 			return "'Nicht invokierbare' Methode mit @RunMe" + errors;
-			
+
 		}
 		return errors;
 	}
-	
-	
-	
-	
-	
-	
-	
+
 }
