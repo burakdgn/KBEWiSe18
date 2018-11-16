@@ -8,7 +8,7 @@
         <servlet-class>de.htw.ai.kbe.songServlet.SongServlet</servlet-class>
         <init-param>
             <param-name>pathToJSON</param-name>
-            <param-value>/home/s0560390/Dokumente/songs.json</param-value>
+            <param-value>/home/rechner/Dokumente/songs.json</param-value>
         </init-param>
     </servlet>
 
