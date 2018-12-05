@@ -76,8 +76,10 @@ public class InMemorySongDI implements ISongDI {
 	}
 
 	@Override
-	public boolean updateSong(Song song) {
-		throw new UnsupportedOperationException("updateSong: not yet implemented");
+	public Song updateSong(Song song, Integer id) {
+		song.setId(id);
+		storage.put(song.getId(), song);
+		return song;
 	}
 
 	@Override

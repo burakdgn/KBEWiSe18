@@ -94,10 +94,19 @@ public class SongsWebService {
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/{id}")
-	public Response updateSong(@Context UriInfo uriInfo, String acceptHeader, @PathParam("id") Integer id) {
-		// TODO implement
+	public Response updateSong(@Context UriInfo uriInfo, @PathParam("id") Integer id, String content) {
+		Song song = InMemorySongDI.contentToSong(content);
+		if (song != null) {
+			song = songDI.updateSong(song, id);
 
-		return Response.status(Response.Status.NOT_FOUND).build();
+			if (song.getId() == id) {
+				return Response.status(Response.Status.NO_CONTENT).build();
+			} else {
+				return Response.status(Response.Status.BAD_REQUEST).build();
+			}
+		} else {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
 
 	}
 

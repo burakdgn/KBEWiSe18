@@ -8,7 +8,7 @@ public interface ISongDI {
 	public Song getSong(Integer id); 
 	public Collection<Song> getAllSongs(); 
 	public Integer addSong(Song song); 
-	public boolean updateSong(Song song); 
+	public Song updateSong(Song song, Integer id); 
 	public Song deleteSong(Integer id);
 	
 	
