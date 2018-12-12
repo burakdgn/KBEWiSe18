@@ -17,22 +17,18 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.io.IOUtils;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.htw.ai.kbe.bean.Song;
-import de.htw.ai.kbe.client.SongsClient;
+import de.htw.ai.kbe.filter.Secured;
 import de.htw.ai.kbe.storage.ISongDI;
 import de.htw.ai.kbe.storage.InMemorySongDI;
 
@@ -49,54 +45,65 @@ public class SongsWebService {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Collection<Song> getAllSongs(@HeaderParam("Accept") String acceptHeader) {
-		if (acceptHeader.equals("application/json")) {
-			return songDI.getAllSongs();
-		} else if (acceptHeader.equals("application/xml")) {
-			return songDI.getAllSongs();
+	public Response getAllSongs(@HeaderParam("Accept") String acceptHeader, @HeaderParam("Authorization") String authHeader) {
+		if (acceptHeader.equals("application/json") && isValidToken(authHeader)) {
+			return Response.ok(songDI.getAllSongs()).build();
+		} else if (acceptHeader.equals("application/xml") && isValidToken(authHeader)) {
+			GenericEntity<Collection<Song>> entity = new GenericEntity<Collection<Song>>(songDI.getAllSongs()) {};
+			return Response.ok(entity).build();
+		}else if (!isValidToken(authHeader)) {
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 
-		return null;
+		return Response.status(Response.Status.NOT_FOUND).build();
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Response getSong(@HeaderParam("Accept") String acceptHeader, @PathParam("id") Integer id) {
-		if (acceptHeader.equals("application/json") || acceptHeader.equals("application/xml")) {
+	public Response getSong(@HeaderParam("Accept") String acceptHeader, @PathParam("id") Integer id,
+			@HeaderParam("Authorization") String authHeader) {
+		if ((acceptHeader.equals("application/json") || acceptHeader.equals("application/xml"))
+				&& isValidToken(authHeader)) {
 			if (songDI.getSong(id) != null) {
 				return Response.ok(songDI.getSong(id)).build();
 			} else {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			}
-		} else {
-			return Response.status(Response.Status.NOT_FOUND).build();
+		} else if (!isValidToken(authHeader)) {
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
+
+		return Response.status(Response.Status.NOT_FOUND).build();
 	}
 
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response createSong(@Context UriInfo uriInfo, String content)
+	public Response createSong(@Context UriInfo uriInfo, String content,
+			@HeaderParam("Authorization") String authHeader)
 			throws JsonParseException, JsonMappingException, IOException, JAXBException {
 		Song song = InMemorySongDI.contentToSong(content);
-		if (song != null) {
+		if (song != null && isValidToken(authHeader)) {
 			int newId = songDI.addSong(song);
 			UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
 			uriBuilder.path(Integer.toString(newId));
 
 			return Response.created(uriBuilder.build()).build();
-		} else {
-			return Response.status(Response.Status.BAD_REQUEST).build();
+		} else if (!isValidToken(authHeader)) {
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
+
+		return Response.status(Response.Status.BAD_REQUEST).build();
 	}
-	
+
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/{id}")
-	public Response updateSong(@Context UriInfo uriInfo, @PathParam("id") Integer id, String content) {
+	public Response updateSong(@Context UriInfo uriInfo, @PathParam("id") Integer id, String content,
+			@HeaderParam("Authorization") String authHeader) {
 		Song song = InMemorySongDI.contentToSong(content);
-		if (song != null) {
+		if (song != null && isValidToken(authHeader)) {
 			song = songDI.updateSong(song, id);
 
 			if (song.getId() == id) {
@@ -104,22 +111,29 @@ public class SongsWebService {
 			} else {
 				return Response.status(Response.Status.BAD_REQUEST).build();
 			}
-		} else {
-			return Response.status(Response.Status.BAD_REQUEST).build();
+		} else if (!isValidToken(authHeader)) {
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 
+		return Response.status(Response.Status.BAD_REQUEST).build();
 	}
 
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response deleteSong(@PathParam("id") Integer id) {
+	public Response deleteSong(@PathParam("id") Integer id, @HeaderParam("Authorization") String authHeader) {
 
-		if (songDI.deleteSong(id) != null) {
+		if (songDI.deleteSong(id) != null && isValidToken(authHeader)) {
 			return Response.status(Response.Status.NO_CONTENT).build();
+		} else if (!isValidToken(authHeader)) {
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
-		return Response.status(Response.Status.NOT_FOUND).build();
 
+		return Response.status(Response.Status.NOT_FOUND).build();
+	}
+
+	public boolean isValidToken(String token) {
+		return UserWebService.isValidToken(token);
 	}
 }
 

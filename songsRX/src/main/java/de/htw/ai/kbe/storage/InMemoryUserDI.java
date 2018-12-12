@@ -21,7 +21,6 @@ public class InMemoryUserDI implements IUserDI {
 
 	private static Map<Integer, User> storage;
 	private final static String JSON_SOURCE = "/user.json";
-	private static int idCounter = 0;
 
 	public InMemoryUserDI() {
 		initSomeUsers(getFile());
@@ -34,12 +33,6 @@ public class InMemoryUserDI implements IUserDI {
 		}
 		userList.stream().filter(s -> s.getId() != null).sorted(Comparator.comparing(User::getId))
 				.forEach(s -> storage.put(s.getId(), s));
-
-		for (User u : storage.values()) {
-			if (u.getId() > idCounter) {
-				idCounter = u.getId();
-			}
-		}
 	}
 
 	public static List<User> getFile() {
@@ -57,18 +50,7 @@ public class InMemoryUserDI implements IUserDI {
 	}
 
 	@Override
-	public String generateToken(String userId) {
-
-		String token = UUID.randomUUID().toString();
-		token = token.replace("-", "");
-		setUserToken(userId, token);
-		return token;
-
-	}
-
-	@Override
 	public Boolean getUser(String userId) {
-
 		for (User u : storage.values()) {
 			if (u.getUserId().equals(userId)) {
 				return true;
@@ -78,19 +60,7 @@ public class InMemoryUserDI implements IUserDI {
 		return false;
 	}
 
-	private static void setUserToken(String userId, String token) {
-		for (User u : storage.values()) {
-			if (u.getUserId().equals(userId)) {
-				u.setToken(token);
-				break;
-			}
-		}
-
-	}
-
-
 	public Collection<User> getAllUsers() {
 		return storage.values();
-	}
-
+	}	
 }

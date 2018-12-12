@@ -6,10 +6,6 @@ import de.htw.ai.kbe.bean.Song;
 import de.htw.ai.kbe.bean.User;
 
 public interface IUserDI {
-
-	public String generateToken(String userId); 
 	public Boolean getUser(String userId);
-	public Collection<User> getAllUsers();
-	 
-	
+	public Collection<User> getAllUsers();	
 }

@@ -9,8 +9,7 @@ public class User {
 	private String userId;
 	private String lastName;
 	private String firstName;
-	private String token;
-
+	
 	public User() {
 	}
 
@@ -45,16 +44,4 @@ public class User {
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-
-
-
 }

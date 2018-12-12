@@ -22,7 +22,6 @@ public class InMemorySongDI implements ISongDI {
 
 	private static Map<Integer, Song> storage;
 	private final static String JSON_SOURCE = "/songs.json";
-	private static int idCounter = 0;
 
 	public InMemorySongDI() {
 		initSomeSongs(getFile());
@@ -35,12 +34,6 @@ public class InMemorySongDI implements ISongDI {
 		}
 		songList.stream().filter(s -> s.getId() != null).sorted(Comparator.comparing(Song::getId))
 				.forEach(s -> storage.put(s.getId(), s));
-
-		for (Song s : storage.values()) {
-			if (s.getId() > idCounter) {
-				idCounter = s.getId();
-			}
-		}
 	}
 
 	public static List<Song> getFile() {
@@ -77,8 +70,12 @@ public class InMemorySongDI implements ISongDI {
 
 	@Override
 	public Song updateSong(Song song, Integer id) {
-		song.setId(id);
-		storage.put(song.getId(), song);
+
+		if (storage.containsKey(id)) {
+			song.setId(id);
+			storage.put(song.getId(), song);
+
+		}
 		return song;
 	}
 

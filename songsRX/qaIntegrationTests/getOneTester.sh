@@ -24,6 +24,7 @@ echo "--------------------------------------------------------------------------
 echo "--- REQUESTING CONTACT with id NEW --------"
 curl -X GET \
      -H "Accept: application/json" \
+     -H "6e0dec828cdf48f480cab19e543d7790"
      -v "http://localhost:8080/songsRX/rest/songs/NEW"
 echo " "
 echo "-------------------------------------------------------------------------------------------------"
