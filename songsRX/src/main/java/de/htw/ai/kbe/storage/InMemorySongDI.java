@@ -22,6 +22,7 @@ public class InMemorySongDI implements ISongDI {
 
 	private static Map<Integer, Song> storage;
 	private final static String JSON_SOURCE = "/songs.json";
+	private static int idCounter = 0;
 
 	public InMemorySongDI() {
 		initSomeSongs(getFile());
@@ -34,9 +35,13 @@ public class InMemorySongDI implements ISongDI {
 		}
 		songList.stream().filter(s -> s.getId() != null).sorted(Comparator.comparing(Song::getId))
 				.forEach(s -> storage.put(s.getId(), s));
+		for(Song s : storage.values()){
+            if(s.getId() > idCounter)
+                idCounter = s.getId();
+        }
 	}
 
-	public static List<Song> getFile() {
+	public synchronized static List<Song> getFile() {
 		List<Song> songs = new ArrayList<>();
 		ObjectMapper objectMapper = new ObjectMapper();
 		try (InputStream inputStream = InMemorySongDI.class.getResourceAsStream(JSON_SOURCE)) {
@@ -51,25 +56,25 @@ public class InMemorySongDI implements ISongDI {
 	}
 
 	@Override
-	public Collection<Song> getAllSongs() {
+	public synchronized Collection<Song> getAllSongs() {
 		return storage.values();
 	}
 
 	@Override
-	public Song getSong(Integer id) {
+	public synchronized Song getSong(Integer id) {
 		return storage.get(id);
 
 	}
 
 	@Override
-	public Integer addSong(Song song) {
-		song.setId((int) storage.keySet().stream().count() + 1);
+	public synchronized Integer addSong(Song song) {
+		song.setId(++idCounter);
 		storage.put(song.getId(), song);
 		return song.getId();
 	}
 
 	@Override
-	public Song updateSong(Song song, Integer id) {
+	public synchronized Song updateSong(Song song, Integer id) {
 
 		if (storage.containsKey(id)) {
 			song.setId(id);
@@ -80,7 +85,7 @@ public class InMemorySongDI implements ISongDI {
 	}
 
 	@Override
-	public Song deleteSong(Integer id) {
+	public synchronized Song deleteSong(Integer id) {
 		return storage.remove(id);
 	}
 

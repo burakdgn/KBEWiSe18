@@ -67,6 +67,7 @@ public class SongsRXWebServiceTest extends JerseyTest {
 		assertEquals(204, response.getStatus());
 	}
 
+	/*
 	@Test
 	public void putWithoutAuthorizationXML() {
 		Song s = new Song.Builder("New Song").artist("New Artist").album("new Album").released("12/12/2012").id(1)
@@ -82,5 +83,7 @@ public class SongsRXWebServiceTest extends JerseyTest {
 		Response response = target("/songs/1").request().header(HttpHeaders.AUTHORIZATION, "").put(Entity.json(s));
 		assertEquals(401, response.getStatus());
 	}
+	*/
+	
 
 }

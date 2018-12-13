@@ -16,7 +16,6 @@ import javax.ws.rs.core.Response;
 import de.htw.ai.kbe.bean.User;
 import de.htw.ai.kbe.storage.IUserDI;
 
-//Achtung Testklasse nach s.24 umschreiben 
 @Path("/auth")
 public class UserWebService {
 	private IUserDI userDI;
