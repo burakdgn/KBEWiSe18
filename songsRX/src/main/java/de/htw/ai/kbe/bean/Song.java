@@ -1,16 +1,21 @@
 package de.htw.ai.kbe.bean;
 
-import javax.persistence.Column;
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.ManyToMany;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-
-
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
+@XmlRootElement(name = "song")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Song {
 
 	
@@ -22,6 +27,10 @@ public class Song {
 	private String artist;
 	private String album;
 	private String released;
+	
+	@ManyToMany(mappedBy = "songs", fetch = FetchType.EAGER)	
+	@XmlTransient
+	private List<Songlist> lists;
 	
 	public Song() {}
 
@@ -41,7 +50,7 @@ public class Song {
 	
 	
 	}
-
+	
 	
 	public Integer getId() {
 		return id;

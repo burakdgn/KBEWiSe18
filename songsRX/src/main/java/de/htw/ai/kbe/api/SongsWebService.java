@@ -76,10 +76,12 @@ public class SongsWebService {
 
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces(MediaType.TEXT_PLAIN)
 	@Path("/{id}")
 	public Response updateSong(Song song, @PathParam("id") Integer id) {
 
-		return Response.ok(songDI.updateSong(song, id)).build();
+		songDI.updateSong(song, id);
+		return Response.status(Response.Status.NO_CONTENT).build();
 		
 	}
 

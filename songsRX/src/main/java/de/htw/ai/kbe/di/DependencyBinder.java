@@ -7,7 +7,9 @@ import javax.persistence.Persistence;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
+import de.htw.ai.kbe.storage.DBSongList;
 import de.htw.ai.kbe.storage.ISongDI;
+import de.htw.ai.kbe.storage.ISongListDI;
 import de.htw.ai.kbe.storage.IUserDI;
 import de.htw.ai.kbe.storage.InMemorySongDI;
 import de.htw.ai.kbe.storage.InMemoryUserDI;
@@ -21,6 +23,7 @@ public class DependencyBinder extends AbstractBinder{
 		bind (Persistence.createEntityManagerFactory("songDB")).to(EntityManagerFactory.class);
 		bind(InMemorySongDI.class).to(ISongDI.class).in(Singleton.class);
 		bind(InMemoryUserDI.class).to(IUserDI.class).in(Singleton.class);
+		bind(DBSongList.class).to(ISongListDI.class).in(Singleton.class);
 	}
 
 }

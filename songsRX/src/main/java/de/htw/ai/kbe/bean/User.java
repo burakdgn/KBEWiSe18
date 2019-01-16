@@ -2,28 +2,40 @@ package de.htw.ai.kbe.bean;
 
 
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 
 
 
 
 @Entity
+@XmlRootElement(name = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User {
 
+	
 	@Id //kennzeichnet das Identitätsattribut entspricht dem PK (primary key)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)//bedeutet, dass der PK automatisch durch die DB vergeben wird
-	private int id;
-	
 	private String userId;
 
 	private String lastName;
 
 	private String firstName;
 
+	
+	
 	
     public User() {
     	
@@ -41,9 +53,6 @@ public class User {
        
     }
 	
-	public int getId() {
-		return id;
-	}
 	
 
 	public void setUserId(String userId) {
@@ -71,13 +80,6 @@ public class User {
 	public String getFirstName() {
 		return firstName;
 	}
-
-
-
-
-
-
-
 
 	
 }

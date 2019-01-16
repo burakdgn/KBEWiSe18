@@ -8,5 +8,5 @@ import de.htw.ai.kbe.bean.User;
 
 public interface IUserDI {
 	public User getUser(String userId);
-	public Collection<User> getAllUsers();	
+	public Collection<User> getAllUsers();
 }

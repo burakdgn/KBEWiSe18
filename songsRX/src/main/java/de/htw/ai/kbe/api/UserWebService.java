@@ -3,6 +3,7 @@ package de.htw.ai.kbe.api;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import javax.inject.*;
@@ -27,21 +28,19 @@ public class UserWebService {
 		this.userDI = aUser;
 		tokens = Collections.synchronizedMap(new HashMap<>());
 	}
-	
+
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/users")
 	public Response getUsers() {
-		
-			return Response.ok(userDI.getAllUsers()).build();
-		}
 
-	
+		return Response.ok(userDI.getAllUsers()).build();
+	}
 
 	@GET
-	@Produces( MediaType.TEXT_PLAIN )
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response getToken(@QueryParam("userId") String userId) {
-	
+
 		if (userDI.getUser(userId) != null) {
 			String token = generateToken();
 			tokens.put(userId, token);
@@ -61,12 +60,22 @@ public class UserWebService {
 	public static boolean isValidToken(String token) {
 		if (tokens != null) {
 			return tokens.containsValue(token);
-		} 
-		
+		}
+
 		if (token.equals(testToken)) {
 			return true;
 		}
-		
+
 		return false;
 	}
+
+	public static String getUserFromToken(String token) {
+		for (Entry<String, String> entry : tokens.entrySet()) {
+			if (entry.getValue().equals(token)) {
+				return entry.getKey();
+			}
+		}
+		return "not authorized";
+	}
+
 }

@@ -10,7 +10,7 @@ public interface ISongDI {
 	public Song findSongById(Integer id); 
 	public Collection<Song> findAllSongs(); 
 	public Integer saveSong(Song song); 
-	public Song updateSong(Song song, Integer id); 
+	public void updateSong(Song song, Integer id); 
 
 	
 	

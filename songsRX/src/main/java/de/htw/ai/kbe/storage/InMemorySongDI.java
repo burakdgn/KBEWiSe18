@@ -27,103 +27,92 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.htw.ai.kbe.bean.Song;
 import de.htw.ai.kbe.bean.User;
 
-
-
-
 public class InMemorySongDI implements ISongDI {
 
 	private EntityManagerFactory emf;
 
-	   @Inject
-	    public InMemorySongDI(EntityManagerFactory emf) {
-	        this.emf = emf;
-	    }
-
+	@Inject
+	public InMemorySongDI(EntityManagerFactory emf) {
+		this.emf = emf;
+	}
 
 	@Override
 	public synchronized Collection<Song> findAllSongs() {
-	
-		 EntityManager em = emf.createEntityManager();
-	        try {
-	            TypedQuery<Song> query = em.createQuery("SELECT s FROM Song s", Song.class);
-	            return query.getResultList();
-	        } finally {
-	            em.close();
-	        }
-		
-		
+
+		EntityManager em = emf.createEntityManager();
+		try {
+			TypedQuery<Song> query = em.createQuery("SELECT s FROM Song s", Song.class);
+			return query.getResultList();
+		} finally {
+			em.close();
+		}
+
 	}
 
 	@Override
 	public synchronized Song findSongById(Integer id) {
-		  EntityManager em = emf.createEntityManager();
-	        Song entity = null;
-	        try {
-	            entity = em.find(Song.class, id);
-	        } finally {
-	            em.close();
-	        }
-	        return entity;
+		EntityManager em = emf.createEntityManager();
+		Song entity = null;
+		try {
+			entity = em.find(Song.class, id);
+			
+		} finally {
+			em.close();
+		}
+		
+		return entity;
 
 	}
-
 
 	@Override
 	public Integer saveSong(Song song) {
-		
-		EntityManager em = emf.createEntityManager();
-	        EntityTransaction transaction = em.getTransaction();
-	        try {
-	            transaction.begin();
-	            // MUST set the contact in every address
-	            //Song songPOST = song;
-	            Song songPOST = new Song(song.getTitle(), song.getArtist() , song.getAlbum(), song.getReleased());
-	            em.persist(songPOST);
-	            transaction.commit();
-	            return songPOST.getId();
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            System.out.println("Error adding contact: " + e.getMessage());
-	            transaction.rollback();
-	            throw new PersistenceException("Could not persist entity: " + e.toString());
-	        } finally {
-	            em.close();
-	        }
-		
-		
-	}
 
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+			// MUST set the contact in every address
+			// Song songPOST = song;
+			Song songPOST = new Song(song.getTitle(), song.getArtist(), song.getAlbum(), song.getReleased());
+			em.persist(songPOST);
+			transaction.commit();
+			return songPOST.getId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error adding contact: " + e.getMessage());
+			transaction.rollback();
+			throw new PersistenceException("Could not persist entity: " + e.toString());
+		} finally {
+			em.close();
+		}
+
+	}
 
 	@Override
-	public Song updateSong(Song song, Integer id) {
-     	//PUT Funktioniert noch nicht
+	public void updateSong(Song song, Integer id) {
+	
 		EntityManager em = emf.createEntityManager();
-     	EntityTransaction transaction = em.getTransaction();
-     
-        Song entity = null;
-        try {
-        	   transaction.begin();
-	            // MUST set the contact in every address
-	            //songPUT hat die neuen Attribute
-	            Song songPUT = new Song(song.getTitle(), song.getArtist() , song.getAlbum(), song.getReleased());
-	           //entity  = der Song der geupdatet wird
-	            entity = em.find(Song.class, id);
-	            //Hier fehlt noch der wichtigste Teil und zwar der row die wir gefunden haben
-	            //alle Attribute von songPUT zu übergeben
-	            transaction.commit();
-        	
-           
-            
-        } finally {
-            em.close();
-        }
-        return entity;
+		EntityTransaction transaction = em.getTransaction();
+		
+	
+		try {
+			transaction.begin();
+			Song entity = em.find(Song.class, id);
+			
+			
+			entity.setTitle(song.getTitle());
+			entity.setArtist(song.getArtist());
+			entity.setAlbum(song.getAlbum());
+			entity.setReleased(song.getReleased());
 
+			transaction.commit();
+			
+
+		} finally {
+			em.close();
+		}
+		
+		
 	}
 
-
-
-	
-
-	
 }
