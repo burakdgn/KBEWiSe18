@@ -1,0 +1,26 @@
+{
+    "id": 2,
+    "user": {
+        "userId": "mmuster",
+        "lastName": "Muster",
+        "firstName": "Maxime"
+    },
+    "name": "playlist6",
+    "songs": [
+        {
+            "id": 9,
+        "title": "Private Show",
+        "artist": "Britney Spears",
+        "album": "Glory",
+        "released": "2016"
+        },
+        {
+            "id": 10,
+        "title": "7 Years",
+        "artist": "Lukas Graham",
+        "album": "Lukas Graham (Blue Album)",
+        "released": "2015"
+        }
+    ],
+    "isPrivate": true
+}
